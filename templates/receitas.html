@@ -14,7 +14,6 @@
             {% for receita in receitas %}
                 <div class="pedido">
                     <h2>NOME: {{ receita.nomeReceita }}</h2>
-                    <h2>ID: {{ receita.receitaId }}</h2>
                     <ul>
                         {% for ingrediente in receita.ingredientes %}
                             <li>{{ ingrediente }}</li>
