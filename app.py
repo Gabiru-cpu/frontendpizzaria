@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import requests
+import os
 
 app = Flask(__name__)
 
@@ -109,9 +110,6 @@ def relatorio():
     # Renderiza o template com a mensagem e a cor correspondente
     return render_template('relatorio.html', mensagem=mensagem, cor_mensagem=cor_mensagem, receita_id=receita_id)
 
-
-
-
-
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
