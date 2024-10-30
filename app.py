@@ -26,7 +26,7 @@ def index():
 
         # Faz a requisição POST para o backend Spring
         try:
-            response = requests.post('https://backendpizzaria-lc53.onrender.com/estoque', json=payload)
+            response = requests.post('https://backendpizzaria-jw9a.onrender.com/estoque', json=payload)
             response.raise_for_status()  # Garante que a resposta seja válida
             return redirect(url_for('estoque'))
         except requests.exceptions.RequestException as e:
@@ -38,7 +38,7 @@ def index():
 @app.route('/estoque')
 def estoque():
     try:
-        response = requests.get('https://backendpizzaria-lc53.onrender.com/estoque')
+        response = requests.get('https://backendpizzaria-jw9a.onrender.com/estoque')
         response.raise_for_status()
         estoque_data = response.json()  # Processa o JSON recebido
     except requests.exceptions.RequestException as e:
@@ -51,7 +51,7 @@ def estoque():
 def receitas():
     try:
         # Faz a requisição para obter as receitas sugeridas
-        response = requests.get('https://backendpizzaria-lc53.onrender.com/receita/receitas-sugeridas')
+        response = requests.get('https://backendpizzaria-jw9a.onrender.com/receita/receitas-sugeridas')
         response.raise_for_status()
         receitas_sugeridas = response.json()  # Processa o JSON recebido
     except requests.exceptions.RequestException as e:
@@ -60,7 +60,7 @@ def receitas():
 
     # Agora, vamos buscar os ingredientes do estoque
     try:
-        response = requests.get('https://backendpizzaria-lc53.onrender.com/estoque')  # Endpoint para obter o estoque
+        response = requests.get('https://backendpizzaria-jw9a.onrender.com/estoque')  # Endpoint para obter o estoque
         response.raise_for_status()
         estoque_data = response.json()  # Processa o JSON recebido
     except requests.exceptions.RequestException as e:
@@ -85,7 +85,7 @@ def relatorio():
     if receita_id:
         try:
             # Faz a requisição para o backend com o ID da receita
-            response = requests.get(f'https://backendpizzaria-lc53.onrender.com/receita/verificar-ingredientes?receitaId={receita_id}')
+            response = requests.get(f'https://backendpizzaria-jw9a.onrender.com/receita/verificar-ingredientes?receitaId={receita_id}')
             
             # Verifica o status da resposta
             if response.status_code == 200:
