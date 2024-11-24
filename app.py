@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from datetime import datetime
 import requests
 import os
 
@@ -89,26 +90,77 @@ def relatorio():
             
             # Verifica o status da resposta
             if response.status_code == 200:
-                # Se a resposta for 200, captura a mensagem de sucesso e define a cor verde
+                # Se a resposta for 200, captura a mensagem de sucesso
                 mensagem = response.text
                 cor_mensagem = "green"
             elif response.status_code == 400:
-                # Se a resposta for 400, captura a mensagem de erro e define a cor vermelha
+                # Se a resposta for 400, captura a mensagem de erro
                 mensagem = response.text
-                cor_mensagem = "red"
+                cor_mensagem = "black"
             else:
-                mensagem = "Erro inesperado. Tente novamente mais tarde."
+                mensagem = response.text
                 cor_mensagem = "red"  # Define vermelho para outros erros
         except requests.exceptions.RequestException as e:
             print(f"Erro ao verificar ingredientes da receita: {e}")
-            mensagem = "Erro ao verificar ingredientes. Tente novamente mais tarde."
+            mensagem = "Erro ao verificar ingredientes no Servidor. Tente novamente mais tarde."
             cor_mensagem = "red"  # Define vermelho para erros de requisição
     else:
         mensagem = "ID da receita não fornecido."
         cor_mensagem = "red"  # Define vermelho se não houver ID
 
-    # Renderiza o template com a mensagem e a cor correspondente
-    return render_template('relatorio.html', mensagem=mensagem, cor_mensagem=cor_mensagem, receita_id=receita_id)
+    if not mensagem:
+        mensagem = "Nenhuma mensagem recebida do backend."
+        cor_mensagem = "red"
+        print("Mensagem vazia ou inválida")
+    
+    # Formatação da mensagem com HTML
+    partes = mensagem.split('|')
+    mensagem_formatada = []
+    
+    for parte in partes:
+        itens = parte.split('/')
+        if len(itens) == 2:
+            item_1 = itens[0].strip()
+            item_2 = itens[1].strip()
+            # Usando <span> para aplicar cores diferentes
+            mensagem_formatada.append(f"<span style='color: red;'>{item_1}</span> está em falta sugira trocar por <span style='color: blue;'>{item_2}</span>")
+    
+    # Junta as partes formatadas com espaço
+    mensagem_formatada = ' '.join(mensagem_formatada)
+    
+    # Renderiza o template com a mensagem formatada e a cor correspondente
+    return render_template('relatorio.html', 
+                           mensagem_formatada=mensagem_formatada, 
+                           mensagem_normal=mensagem, 
+                           cor_mensagem=cor_mensagem, 
+                           receita_id=receita_id)
+
+
+
+
+@app.route('/pedidos')
+def pedidos():
+    try:
+        # Supondo que você tenha uma API ou banco de dados para buscar os pedidos
+        response = requests.get('https://backendpizzaria-jw9a.onrender.com/pedidos')
+        response.raise_for_status()
+        pedidos_data = response.json()  # Processa o JSON recebido
+
+        # Formatar a data de cada pedido
+        for pedido in pedidos_data:
+            # Supondo que pedido['dataPedido'] seja uma string no formato ISO ou similar
+            if 'dataPedido' in pedido:
+                # Converte a string da data para um objeto datetime
+                data_obj = datetime.fromisoformat(pedido['dataPedido'])
+                # Formata a data para o formato desejado
+                pedido['dataPedido'] = data_obj.strftime('%d/%m/%Y %H:%M')
+
+    except requests.exceptions.RequestException as e:
+        print(f"Erro ao obter dados de pedidos: {e}")
+        pedidos_data = []
+
+    return render_template('pedidos.html', pedidos=pedidos_data)
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

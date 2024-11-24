@@ -50,7 +50,7 @@
             const ultimoDiaDoMes = new Date(dataAtual.getFullYear(), dataAtual.getMonth() + 1, 0).getDate();
             const diasRestantes = ultimoDiaDoMes - dataAtual.getDate();
 
-            if (diasRestantes < 5) { // Exibir o card se faltam 5 para acabar o mes
+            if (diasRestantes < 14) { // Exibir o card se faltam 14 para acabar o mes
                 document.getElementById('sugestaoCard').style.display = 'block';
             }
         </script>

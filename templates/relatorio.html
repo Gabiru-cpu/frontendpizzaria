@@ -1,4 +1,3 @@
-<!-- relatorio.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -10,14 +9,25 @@
 <body>
     <div class="container">
         <h1>Relatório de Receitas</h1>
-        
-        {% if mensagem %}
-            <p style="color: {{ cor_mensagem }}">{{ mensagem }}</p>
+
+        {% if mensagem_formatada %}
+            <p style="color: {{ cor_mensagem }};">{{ mensagem_formatada | safe }}</p>
+            <br>
+            <p>Veja se o ingrediente é viavel nos gastos do pedido.</p>
         {% else %}
-            <p>Nenhuma informação disponível.</p>
+            <p style="color: {{ cor_mensagem }};">{{ mensagem_normal }}</p>
         {% endif %}
         
-        <button onclick="window.location.href='/receitas'">Voltar para Receitas</button>
+        <button onclick="goBack()">Voltar</button>
     </div>
 </body>
+<script>
+    function goBack() {        
+        if (document.referrer && document.referrer.includes(window.location.hostname)) {
+            window.location.href = document.referrer; // Volta para a página anterior
+        } else {            
+            window.location.href = '/'; 
+        }
+    }
+</script>
 </html>
