@@ -19,10 +19,11 @@
         }
     </script>
 </head>
-<body>
+<body>    
     <div class="container pedidos-container">
         <h1>Pedidos</h1>
-
+        <button class="button-right" onclick="window.location.href='/receitas'">Conferir Todas Receitas</button>
+        <br><br><br>
         {% if pedidos %}
             {% for pedido in pedidos %}
                 <div class="pedido">
@@ -34,7 +35,7 @@
                             <li>
                                 <strong>Nome da Receita:</strong> {{ item.receita.nomeReceita }} <br>
                                 
-                                <a href="javascript:void(0);" id="link-{{ item.receita.receitaId }}" onclick="toggleIngredientes({{ item.receita.receitaId }})">Mostrar Ingredientes</a> <br>
+                                <a href="javascript:void(0);" id="link-{{ item.receita.receitaId }}" class="link-button" onclick="toggleIngredientes({{ item.receita.receitaId }})">Mostrar Ingredientes</a> <br>
                                 
                                 <ul id="ingredientes-{{ item.receita.receitaId }}" style="display: none;">
                                     {% for ingrediente in item.receita.ingredientes %}
